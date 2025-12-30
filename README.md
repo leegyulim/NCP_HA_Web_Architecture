@@ -1,17 +1,37 @@
-# NCP 기반 고가용성(HA) 웹 서비스 아키텍처 구축
-프로젝트 목적: 단일 서버 장애 및 데이터 센터 급 장애에도 중단되지 않는 탄력적 인프라 환경 구축
+# 🌐 NCP 기반 고가용성(HA) 웹 서비스 아키텍처 구축
+
+> **Naver Cloud Platform(VPC) 환경에서 장애에 강하고 탄력적인 웹 인프라를 설계 및 구축한 프로젝트입니다.**
+
+---
 
 ## 1. 아키텍처 다이어그램
-여기에 아키텍처 다이어그램(그림)을 꼭 넣으세요. (draw.io나 Lucidchart를 추천합니다.)
+![Architecture Diagram](./docs/architecture-diagram.png) 
+*(본인이 그린 다이어그램 이미지를 docs 폴더에 넣고 경로를 연결하세요)*
 
-## 2. 주요 구성 요소
-VPC & Subnet: 보안 강화를 위한 Public/Private Subnet 분리 및 Multi-Zone 배치.
-Load Balancer: ALB(Application Load Balancer)를 통한 부하 분산 및 헬스 체크 기반 장애 감지.
-Auto Scaling: 트래픽 가변성에 따른 자동 서버 확장 및 장애 서버 자동 교체(Self-healing).
-Cloud DB for MySQL: 고가용성(HA) 옵션을 적용하여 Master-Standby Failover 환경 구축.
+## 2. 프로젝트 개요
+단순한 서버 운영을 넘어, 특정 데이터 센터 장애나 갑작스러운 트래픽 증가에도 서비스 중단 없이 대응할 수 있는 **고가용성(High Availability)** 인프라 구축을 목표로 합니다.
 
-## 3. 핵심 트러블슈팅
-Issue: Ubuntu 24.04 Nginx 설치 시 IPv6 소켓 에러로 인한 서비스 기동 실패./n
-Solution: /etc/nginx/sites-available/default 설정 수정을 통해 IPv4 환경에 최적화하여 해결./n
-Issue: NCP ASG의 단일 서브넷 선택 제약으로 인한 멀티 존 구성의 어려움./n
-Solution: Zone별로 독립된 ASG를 생성하고 하나의 Target Group에 바인딩하는 Multi-ASG 구조로 고가용성 구현./n
+## 3. 핵심 기술 스택
+- **Cloud**: Naver Cloud Platform (VPC)
+- **Computing**: Server, Auto Scaling, Launch Configuration
+- **Networking**: Load Balancer (ALB), NAT Gateway, Global DNS
+- **Database**: Cloud DB for MySQL (HA 옵션)
+- **Web Server**: Nginx, Ubuntu 24.04 LTS
+
+## 4. 주요 특징 (Key Features)
+- **Multi-Zone 배치**: KR-1, KR-2 가용 영역에 인프라를 분산하여 데이터 센터 급 장애에 대비.
+- **네트워크 격리**: 외부 접속은 로드밸런서(Public)를 통해서만 가능하며, 실제 서버와 DB는 Private Subnet에 배치하여 보안 강화.
+- **자동 확장(Auto Scaling)**: CPU 부하에 따라 서버 대수가 자동 조절되며, 장애 서버 발생 시 자동으로 새 인프라가 교체되는 Self-healing 구현.
+- **관리형 DB 고가용성**: Master-Standby 구성을 통해 메인 DB 장애 시 자동으로 대기 서버가 서비스를 승격받는 Failover 환경 구축.
+
+## 5. 트러블슈팅 (Troubleshooting)
+### ⚠️ Nginx IPv6 소켓 에러
+- **문제**: Ubuntu 24.04 환경에서 Nginx 설치 시 IPv6 지원 문제로 서비스 기동 실패.
+- **해결**: `/etc/nginx/sites-available/default` 파일 내 `listen [::]:80` 라인을 주석 처리하여 IPv4 환경으로 최적화.
+
+### ⚠️ NCP ASG 멀티 서브넷 선택 제약
+- **문제**: NCP VPC의 ASG는 하나의 서브넷만 지정 가능한 설계적 특성 확인.
+- **해결**: 존별로 독립된 ASG(`asg-kr1`, `asg-kr2`)를 생성하고, 동일한 `Target Group`에 바인딩하여 멀티 존 고가용성 달성.
+
+## 6. 결과 검증
+- **장애 복구 테스트**: 운영 중인 서버 1대를 임의로 반납 처리 시, Auto Scaling 그룹이 이를 감지하고 약 5분 내에 새로운 서버를 자동으로 생성하여 기대 용량(Desired Capacity)을 복원하는 것을 확인.
