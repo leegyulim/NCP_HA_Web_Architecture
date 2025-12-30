@@ -1,9 +1,8 @@
 # 🌐 NCP 기반 고가용성(HA) 웹 서비스 아키텍처 구축
 
 > **Naver Cloud Platform(VPC) 환경에서 장애에 강하고 탄력적인 웹 인프라를 설계 및 구축한 프로젝트입니다.**
-<img width="465" height="1171" alt="고가용성 웹 서비스 아키텍처 다이어그램" src="https://github.com/user-attachments/assets/f384c3fd-6de8-4817-b00c-51e4dd88354d" />
 > 
----
+<img width="465" height="1171" alt="고가용성 웹 서비스 아키텍처 다이어그램" src="https://github.com/user-attachments/assets/f384c3fd-6de8-4817-b00c-51e4dd88354d" />
 
 
 ## 1. 아키텍처 다이어그램
