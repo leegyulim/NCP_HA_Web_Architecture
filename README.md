@@ -2,12 +2,10 @@
 
 > **Naver Cloud Platform(VPC) 환경에서 장애에 강하고 탄력적인 웹 인프라를 설계 및 구축한 프로젝트입니다.**
 > 
-<img width="465" height="1171" alt="고가용성 웹 서비스 아키텍처 다이어그램" src="https://github.com/user-attachments/assets/f384c3fd-6de8-4817-b00c-51e4dd88354d" />
 
 
 ## 1. 아키텍처 다이어그램
-![Architecture Diagram](./docs/architecture-diagram.png) 
-*(본인이 그린 다이어그램 이미지를 docs 폴더에 넣고 경로를 연결하세요)*
+<img width="465" height="1171" alt="고가용성 웹 서비스 아키텍처 다이어그램" src="https://github.com/user-attachments/assets/f384c3fd-6de8-4817-b00c-51e4dd88354d" />
 
 ## 2. 프로젝트 개요
 단순한 서버 운영을 넘어, 특정 데이터 센터 장애나 갑작스러운 트래픽 증가에도 서비스 중단 없이 대응할 수 있는 **고가용성(High Availability)** 인프라 구축을 목표로 합니다.
